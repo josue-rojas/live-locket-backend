@@ -8,13 +8,13 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 // Create Supabase client
 const supabase = createClient(
-  Deno.env.get('LOCAL_SUPABASE_URL'),
-  Deno.env.get('LOCAL_SUPABASE_ANON_KEY'));
+  Deno.env.get('SUPABASE_URL') ?? Deno.env.get('LOCAL_SUPABASE_URL'),
+  Deno.env.get('SUPABASE_ANON_KEY')) ?? Deno.env.get('LOCAL_SUPABASE_ANON_KEY'));
 
 // TODO:
-// - add default uploaded by
 // - return proper http error code
-// - createclient should look up if local env then it should use correct keys
+
+const DEFAULT_UPLOAD_BY = 'anon';
 
 Deno.serve(async (req) => {
   const response = {
@@ -39,7 +39,7 @@ Deno.serve(async (req) => {
         .insert({
           bucket_location: data.fullPath,
           storage_id: data.id,
-          uploaded_by: "anon" 
+          uploaded_by: DEFAULT_UPLOAD_BY 
          });
       
       if (dbError) {
