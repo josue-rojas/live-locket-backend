@@ -7,14 +7,16 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 // Create Supabase client
-const supabase = createClient(
-  Deno.env.get('SUPABASE_URL') ?? Deno.env.get('LOCAL_SUPABASE_URL'),
-  Deno.env.get('SUPABASE_ANON_KEY') ?? Deno.env.get('LOCAL_SUPABASE_ANON_KEY'));
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // TODO:
 // - return proper http error code
 
 Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
   const url = new URL(req.url);
   const pathname = url.pathname.split('/');
   const id = parseInt(pathname[pathname.length - 1]);
@@ -36,6 +38,9 @@ Deno.serve(async (req) => {
   }
 
   return new Response(JSON.stringify(response), 
-    { headers: { "Content-Type": "application/json" } },
+    {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 200,
+    }
   )
 });
