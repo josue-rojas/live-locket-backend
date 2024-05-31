@@ -35,7 +35,7 @@ Deno.serve(async (req) => {
     if (error) {
       response.error = error;
     } else {
-      response.datas = data;
+      response.data = data;
       response.success = true;
 
       const { error: dbError } = await supabase
