@@ -5,6 +5,8 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 /// <reference types="https://esm.sh/@supabase/functions-js/src/edge-runtime.d.ts" />
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { corsHeaders } from '../_shared/cors.ts'
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from '../_constants/supabase.ts';
 
 // Create Supabase client
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
