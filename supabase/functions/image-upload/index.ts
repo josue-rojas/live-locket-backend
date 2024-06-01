@@ -30,6 +30,7 @@ Deno.serve(async (req) => {
     const imageFile = body.get("image");
     const imagePath = `images/${imageFile.name}`;
     
+    // TODO: support duplicate names (maybe we can put them into a folder by user or add a date to the name so it's unique)
     const { data, error } = await supabase.storage.from('images').upload(imagePath, imageFile);
 
     if (error) {
@@ -41,7 +42,7 @@ Deno.serve(async (req) => {
       const { error: dbError } = await supabase
         .from('images')
         .insert({
-          bucket_location: data.fullPath,
+          bucket_location: data.path,
           storage_id: data.id,
           uploaded_by: DEFAULT_UPLOAD_BY 
          });
